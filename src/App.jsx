@@ -1,10 +1,17 @@
 import React from 'react'
-import { Button } from 'antd';
+import { Button } from 'antd'
+import {Outlet,useNavigate} from "react-router-dom";
 
 export default function App() {
+  const navigate=useNavigate()
+  const onClick = (e) => {
+    navigate('/about')
+    
+  };
   return (
     <div>
-        <Button type="primary">Primary Button</Button>
+       <Outlet />
+      <Button type="primary" onClick={onClick} >Primary Button</Button>
     </div>
   )
 }
