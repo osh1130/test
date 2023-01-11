@@ -44,7 +44,7 @@ export default function Header() {
             key: '1',
             label: (
             <a target="_blank" onClick={changemeans}>
-                修改资料
+                Modify Means
             </a>
             ),
         },
@@ -52,7 +52,7 @@ export default function Header() {
             key: '2',
             label: (
             <a target="_blank"  onClick={logout}>
-                退出登录
+                Logout
             </a>
             ),
         },

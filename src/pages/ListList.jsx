@@ -21,7 +21,7 @@ export default function Listlist() {
       num:current,
       count:pageSize
     }).then(res=>{
-      //console.log(res)
+      console.log(res)
       //console.log(localStorage.getItem("cms-token"));
       if(res.errCode===0){
         let{arr,total, num,count} = res.data;

@@ -1,29 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './less/Means.less'
-import { Button, Checkbox, Form, Input, message,Upload  } from 'antd'
+import { Button, Form, Input, message,Upload  } from 'antd'
 import { GetUserInfoApi, ChangeUserDataApi} from '../request/api'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import {connect} from 'react-redux'
 
-// 限制图片大小只能是200KB
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 / 1024  < 200;
-  if (!isLt2M) {
-    message.error('请上传小于200KB的图!');
-  }
-  return isJpgOrPng && isLt2M;
-}
 
-  // 将图片路径转base64
-  function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  }
 
 function Means(props) {
   //const [username1,setUsername1]=useState('')
@@ -49,26 +31,7 @@ function Means(props) {
     })
   })
 
-  // 点击了上传图片
-  const handleChange = info => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl =>{
-        setLoading(false)
-        setImageUrl(imageUrl)
-        // 存储图片名称
-        localStorage.setItem('avatar', info.file.response.data.filePath)
-        //window.location.reload()
-        // 使用react-redux
-        props.addKey()
-      }
-      );
-    }
-  };
+
 
   // 表单提交的事件
   const onFinish = (values) => {
@@ -88,7 +51,6 @@ function Means(props) {
   // 上传按钮
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
@@ -135,8 +97,8 @@ function Means(props) {
         className="avatar-uploader"
         showUploadList={false}
         action="/api/upload"
-        beforeUpload={beforeUpload}
-        onChange={handleChange}
+        //beforeUpload={beforeUpload}
+        //onChange={handleChange}
         headers={{"cms-token": localStorage.getItem('cms-token')}}
       >
         {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
@@ -145,16 +107,6 @@ function Means(props) {
   )
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    //changeMsgFn(){
-    //  let action = {type: 'changeUsername', value: 'hello world'}
-    //  dispatch(action)
-    //},
-    addKey(){
-      dispatch({type: "addKeyFn"})
-    }
-  }
-}
 
-export default connect(null, mapDispatchToProps)(Means)
+
+export default Means
