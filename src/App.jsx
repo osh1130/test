@@ -34,7 +34,7 @@ function ToLogin(){
     3. The rest can be released normally
     */
     const location = useLocation()
-    let token = localStorage.getItem("cms-token");
+    let token = localStorage.getItem("token");
     //1
     if(location.pathname==="/login" && token){
       //console.log("hello");
