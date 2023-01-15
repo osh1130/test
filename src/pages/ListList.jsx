@@ -4,7 +4,7 @@ import { useState,useEffect } from 'react'
 import { ArticleListApi, ArticleDelApi } from '../request/api'
 import moment from 'moment'
 import {useNavigate} from 'react-router-dom'
-
+import {useSelector,useDispatch} from "react-redux"
 
 
 export default function Listlist() {
@@ -16,49 +16,58 @@ export default function Listlist() {
   const [update, setUpdate] = useState(1)
   
   //请求封装
-  const getList = (num) =>{
-    ArticleListApi({
-      num:current,
-      count:pageSize
-    }).then(res=>{
-      console.log(res)
-      //console.log(localStorage.getItem("cms-token"));
-      if(res.errCode===0){
-        let{arr,total, num,count} = res.data;
-        setList(arr);
-        setTotal(total);
-        setCurrent(num);
-        setPageSize(count);
-      }
-    })
-  }
+  // const getList = (num) =>{
+  //   ArticleListApi({
+  //     num:current,
+  //     count:pageSize
+  //   }).then(res=>{
+  //     console.log(res)
+  //     //console.log(localStorage.getItem("cms-token"));
+  //     if(res.errCode===0){
+  //       let{arr,total, num,count} = res.data;
+  //       setList(arr);
+  //       setTotal(total);
+  //       setCurrent(num);
+  //       setPageSize(count);
+  //     }
+  //   })
+  // }
 
+  const { Articlearr } = useSelector((state) => ({
+    Articlearr:state.Articlearr // 这里划曲线警告
+    }));
   //请求列表数据 componentDidMount
   useEffect(()=>{
-    getList(current)
+    //getList(current)
+    console.log(Articlearr);
+    setList(Articlearr);
   },[])
 
   // 模拟componentDidUpdate
   useEffect(() => {
-    getList(current)
+    //getList(current)
+    setList(Articlearr);
   }, [update])
 
   const onChange = (page) => {
     //console.log(page);
     //setCurrent(page); 是异步的
-    getList(page);
+    //getList(page);
   };
 
   const delFn = (id) => {
     //console.log(id);
-    ArticleDelApi({id}).then(res=>{
-      //console.log(res)
-      if(res.errCode===0){
-        message.success(res.message)
-        //重新刷页面，要么重新请求这个列表的数据 window.reload 调用getList(1) 增加变量的检测
-        setUpdate(update+1)
-      }
-    })
+    // ArticleDelApi({id}).then(res=>{
+    //   //console.log(res)
+    //   if(res.errCode===0){
+    //     message.success(res.message)
+    //     //重新刷页面，要么重新请求这个列表的数据 window.reload 调用getList(1) 增加变量的检测
+    //     setUpdate(update+1)
+    //   }
+    // })
+    Articlearr.splice(id-1,1);
+    setUpdate(update+1);
+    console.log(Articlearr);
   };
 
 

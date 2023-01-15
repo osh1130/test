@@ -1,82 +1,86 @@
 import React, { useEffect, useState } from 'react'
-import { Button, PageHeader, Modal, Form, Input,message } from 'antd'
+import { Button, PageHeader, Modal, Form, Input, message } from 'antd'
 import moment from 'moment'
 import E from 'wangeditor'
 //import { ArticleAddApi, ArticleSearchApi, ArticleUpdateApi } from '../request/api'
-import {useParams, useNavigate} from 'react-router-dom'
-import {useLocation} from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import MockArticleData from "../mock/MockArticleData"
+import {useSelector,useDispatch} from "react-redux"
 
 let editor = null
 
-export default function Edit() {
-   const [content, setContent] = useState('')
-   const [isModalOpen, setIsModalOpen] = useState(false);
-   const [isModalVisible, setIsModalVisible] = useState(false);
-   const [title, setTitle] = useState('')
-   const [subTitle, setSubTitle] = useState('')
-  
+export default function Edit(props) {
+  const [content, setContent] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [title, setTitle] = useState('')
+  const [subTitle, setSubTitle] = useState('')
+
   const [form] = Form.useForm();
   const navigate = useNavigate()
-  let {pathname} = useLocation()
-  let params  = useParams()		// 得到当前路径的id
+  let { pathname } = useLocation()
+  let params = useParams()		// 得到当前路径的id
   const [articleData, setArticleData] = useState([]);
-  
-  // 处理请求数据
-  const dealData = (errCode, msg) => {
-    setIsModalVisible(false); // 关闭对话框
-    if (errCode === 0) {
-      message.success(msg)
-      setTimeout(() => {
-        // 跳回list页面
-        navigate('/listlist')
-      }, 1500)
-    } else {
-      message.error(msg)
-    }
-  }
-  useEffect(()=>{
-    
-    //const data=()=>{
-      setArticleData(MockArticleData);
-    //}
-  },[])
-  
 
-  //对话框点击了提交
+  // 处理请求数据
+  // const dealData = (errCode, msg) => {
+  //   setIsModalVisible(false); // 关闭对话框
+  //   if (errCode === 0) {
+  //     message.success(msg)
+  //     setTimeout(() => {
+  //       // 跳回list页面
+  //       navigate('/listlist')
+  //     }, 1500)
+  //   } else {
+  //     message.error(msg)
+  //   }
+  // }
+  useEffect(() => {
+
+    //const data=()=>{
+    setArticleData(MockArticleData);
+    //}
+  }, [])
+   // getdata
+const { Articlearr } = useSelector((state) => ({
+  Articlearr:state.Articlearr // 这里划曲线警告
+  }));
+
+  //Modal submitted and modify data
+  const dispatch = useDispatch();
   const handleOk = () => {
-    //关闭对话框
+    //close Modal
     //setIsModalOpen(false);
     form
       .validateFields()    // validate校验   field字段
-       .then((values) => {
-         form.resetFields();   // reset重置
-         let { title, subTitle } = values;
+      .then((values) => {
+        form.resetFields();   // reset重置
+        let { title, subTitle } = values;
 
-      //   // 地址栏有id代表现在想要更新一篇文章
+        //   // 地址栏有id代表现在想要更新一篇文章
 
-         if (params.id) {
-      //     // 更新文章的请求
-      //     ArticleUpdateApi({ title, subTitle, content, id: params.id }).then(res => dealData(res.errCode, res.message))
-         } else {
-      //     // 添加文章的请求
-      //     ArticleAddApi({ title, subTitle, content }).then(res => dealData(res.errCode, res.message))
-      //   }
-      
-      const id = articleData.length+1;
-      //setArticleData(articleData+={ title, subTitle, content, id});
-      let newArticleData = [...articleData]
-      let second=[...newArticleData,{ title, subTitle, content, id}]
-      console.log(second)
-      setArticleData(second);
-      console.log(second);
-    }
-    })
-       .catch(() => false);
-      
+        if (params.id) {
+          //     // 更新文章的请求
+          //     ArticleUpdateApi({ title, subTitle, content, id: params.id }).then(res => dealData(res.errCode, res.message))
+        } else {
+          //     // 添加文章的请求
+          //     ArticleAddApi({ title, subTitle, content }).then(res => dealData(res.errCode, res.message))
+          //   }
+
+          const id = articleData.length + 1;
+          //setArticleData(articleData+={ title, subTitle, content, id});
+          let newArticleData = [...articleData, { title, subTitle, content, id }] 
+          setArticleData(newArticleData);
+          //console.log(articleData);
+          dispatch({ type: 'changeArticleData',value:articleData});
+          //setIsModalOpen(false);
+          //navigate('/listlist')
+        }
+      })
+      .catch(() => false);
+
   }
-  
-  
 
   // 模拟componentDidMount
   useEffect(() => {
@@ -87,7 +91,7 @@ export default function Edit() {
     editor.create()
 
     //根据地址栏id做请求
-    if(params.id){
+    if (params.id) {
       // ArticleSearchApi({id: params.id}).then(res => {
       //   //console.log(res)
       //   if(res.errCode===0){
@@ -101,27 +105,27 @@ export default function Edit() {
 
     }
 
-    return () => {
+  return () => {
       // 组件销毁时销毁编辑器  注：class写法需要在componentWillUnmount中调用
       editor.destroy()
     }
-  },[pathname])
-  
+  }, [pathname])
+
   return (
     <div>
-      <PageHeader 
-      ghost={false}
-      onBack={params.id ? () =>  window.history.back(): null}
-      title="Edit"
-      subTitle={'Date: '+moment(new Date()).format("YYYY-MM-DD")}
-      extra={<Button key="1" type="primary" onClick={()=>setIsModalOpen(true)}>Submit</Button>}
-    > </PageHeader>
+      <PageHeader
+        ghost={false}
+        onBack={params.id ? () => window.history.back() : null}
+        title="Edit"
+        subTitle={'Date: ' + moment(new Date()).format("YYYY-MM-DD")}
+        extra={<Button key="1" type="primary" onClick={() => setIsModalOpen(true)}>Submit</Button>}
+      > </PageHeader>
 
       <div id="div1" style={{ padding: '0 20px 20px', background: '#fff' }}></div>
 
-      <Modal zIndex={99999} title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={()=>setIsModalOpen(false)} >
-      
-      <Form
+      <Modal zIndex={99999} title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={() => setIsModalOpen(false)} >
+
+        <Form
           form={form}
           name="basic"
           labelCol={{ span: 3 }}
@@ -147,6 +151,9 @@ export default function Edit() {
         </Form>
       </Modal>
     </div>
-    
+
   )
 }
+
+  
+
