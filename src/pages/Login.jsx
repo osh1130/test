@@ -33,9 +33,9 @@ export default function Login() {
     //     }
     //   }) 
     const res = mockuserData;
-    //console.log(res.mockuserData.name)
-    localStorage.setItem("name",res.mockuserData.name)
-    localStorage.setItem("token",res.mockuserData.token)
+    //console.log(res)
+    localStorage.setItem("name",res.name)
+    localStorage.setItem("token",res.token)
     navigate('/listlist')
   };
   

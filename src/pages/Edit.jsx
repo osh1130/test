@@ -63,6 +63,8 @@ const { Articlearr } = useSelector((state) => ({
         if (params.id) {
           //     // 更新文章的请求
           //     ArticleUpdateApi({ title, subTitle, content, id: params.id }).then(res => dealData(res.errCode, res.message))
+          //console.log(params.id-1);
+          editor.txt.html(Articlearr[params.id-1].content)
         } else {
           //     // 添加文章的请求
           //     ArticleAddApi({ title, subTitle, content }).then(res => dealData(res.errCode, res.message))
@@ -70,12 +72,13 @@ const { Articlearr } = useSelector((state) => ({
 
           const id = articleData.length + 1;
           //setArticleData(articleData+={ title, subTitle, content, id});
-          let newArticleData = [...articleData, { title, subTitle, content, id }] 
-          setArticleData(newArticleData);
+          //let newArticleData = [...articleData, { title, subTitle, content, id }] 
+          //setArticleData(newArticleData);
           //console.log(articleData);
-          dispatch({ type: 'changeArticleData',value:articleData});
-          //setIsModalOpen(false);
-          //navigate('/listlist')
+          let values = {title, subTitle, content, id}
+          dispatch({ type: 'changeArticleData',value:values});
+          setIsModalOpen(false);
+          navigate('/listlist')
         }
       })
       .catch(() => false);
@@ -102,6 +105,8 @@ const { Articlearr } = useSelector((state) => ({
       //     setSubTitle(res.data.subTitle)
       //   }
       // })
+      console.log(params.id-1);
+      editor.txt.html(Articlearr[params.id-1].content)
 
     }
 

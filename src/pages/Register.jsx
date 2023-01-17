@@ -44,10 +44,13 @@ const { Userarr } = useSelector((state) => ({
     let token = "11111";
     localStorage.setItem("name",username)
     localStorage.setItem("token",token)
-    let newuserData = [...userData, { username, password, token }];
-    setUserData(newuserData);
-    dispatch({ type: 'changeUserData',value:userData})
+    //let newuserData = [...userData, { username, password, token }];
+    //setUserData(newuserData);
+    //dispatch({ type: 'changeUserData',value:userData})
     //console.log(userData);
+    //navigate('/listlist')
+    //console.log(values);
+    dispatch({ type: 'changeUserData',value:values});
     navigate('/listlist')
   };
 

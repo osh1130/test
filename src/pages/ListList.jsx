@@ -39,7 +39,7 @@ export default function Listlist() {
   //请求列表数据 componentDidMount
   useEffect(()=>{
     //getList(current)
-    console.log(Articlearr);
+    //console.log(Articlearr);
     setList(Articlearr);
   },[])
 

@@ -12,12 +12,14 @@ export default (state=defaultState, action) => {
     switch(action.type){
         case "changeArticleData":
             //newState.sarr.push(111);
-            newState.Articlearr=action.value;
-            console.log(newState);
+            //newState.Articlearr=action.value;
+            newState.Articlearr.push(action.value);
+            //console.log(newState);
             break;
         case "changeUserData":
             //newState.sarr.push(111);
-            newState.Userarr=action.value;
+            //newState.Userarr=action.value;
+            newState.Userarr.push(action.value);
             //console.log(newState);
             break;
         default:
